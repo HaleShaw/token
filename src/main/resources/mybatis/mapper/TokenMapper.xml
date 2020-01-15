@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.wherein.cnstm.mapper.TokenMapper">
+  <resultMap id="BaseResultMap" type="io.wherein.cnstm.model.Token">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="steem_id" property="steemId" jdbcType="VARCHAR"/>
+    <result column="sp" property="sp" jdbcType="DECIMAL"/>
+    <result column="token" property="token" jdbcType="DECIMAL"/>
+    <result column="log_time" property="log_time" javaType="DATE"/>
+    <result column="agent_time" property="agent_time" jdbcType="DATE"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+        id, steem_id, sp, sp/7200 token, log_time, agent_time
+    </sql>
+
+  <select id="getAll" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM token
+  </select>
+
+  <select id="getCurrentToken" parameterType="java.lang.String" resultType="java.util.HashMap">
+    SELECT ( @i := @i + 1 ) AS ID, steem_id, sp, sp /( ts.total_sp * 7200 ) AS token, agent_time
+    FROM
+      token,
+      ( SELECT SUM( sp ) AS total_sp FROM token WHERE log_time = #{date}) AS ts,
+      ( SELECT @i := 0 ) AS t
+    WHERE
+      log_time = #{date}
+    ORDER BY
+      sp DESC;
+  </select>
+
+  <select id="getTotalSP" resultType="java.util.HashMap">
+    SELECT steem_id, SUM(sp) AS totalSP FROM token GROUP BY steem_id
+  </select>
+
+  <select id="getCountByDate" parameterType="java.lang.String" resultType="int">
+    SELECT COUNT(*) FROM token
+    WHERE
+        log_time = #{date}
+  </select>
+
+  <insert id="addSP" parameterType="java.util.ArrayList">
+    insert into `token`(steem_id,sp,log_time,agent_time) values
+    <foreach collection="list" index="index" separator="," item="item">
+      (#{item.delegator},#{item.sp},now(),#{item.time})
+    </foreach>
+  </insert>
+</mapper>
