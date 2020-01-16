@@ -28,8 +28,14 @@ public interface TokenMapper {
 
   /**
    * Get count by date.
+   *
    * @param date date.
    * @return count of data.
    */
-  int getCountByDate(@Param(value="date") String date);
+  int getCountByDate(@Param(value = "date") String date);
+
+  /**
+   * Get last date.
+   */
+  String getLastDate();
 }

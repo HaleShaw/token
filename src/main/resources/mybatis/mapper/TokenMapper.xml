@@ -49,4 +49,8 @@
       (#{item.delegator},#{item.sp},now(),#{item.time})
     </foreach>
   </insert>
+
+  <select id="getLastDate" resultType="String">
+    SELECT log_time FROM token WHERE id=(SELECT MAX(id) FROM token);
+  </select>
 </mapper>

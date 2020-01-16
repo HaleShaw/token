@@ -30,15 +30,15 @@ public class TokenServiceImpl implements TokenService {
   public List<Map<String, Object>> getAll(String date) {
     List<Map<String, Object>> currentToken = tokenMapper.getCurrentToken(date);
     List<Map<String, Object>> totalSP = tokenMapper.getTotalSP();
-    Map<String,BigDecimal> sPs = new HashMap<>(128);
-    for (Map<String, Object> sp: totalSP    ) {
-      sPs.put(sp.get("steem_id").toString(),new BigDecimal(sp.get("totalSP").toString()));
+    Map<String, BigDecimal> sPs = new HashMap<>(128);
+    for (Map<String, Object> sp : totalSP) {
+      sPs.put(sp.get("steem_id").toString(), new BigDecimal(sp.get("totalSP").toString()));
     }
 
-    for (Map<String, Object> token:currentToken) {
-      String steem_id = token.get("steem_id").toString();
-      if(sPs.containsKey(steem_id)){
-        token.put("totalToken",new BigDecimal(sPs.get(steem_id).toString()));
+    for (Map<String, Object> token : currentToken) {
+      String steemId = token.get("steem_id").toString();
+      if (sPs.containsKey(steemId)) {
+        token.put("totalToken", new BigDecimal(sPs.get(steemId).toString()));
       }
     }
     return currentToken;
@@ -46,6 +46,7 @@ public class TokenServiceImpl implements TokenService {
 
   /**
    * Get token by date.
+   *
    * @return List.
    */
   @Override
@@ -55,6 +56,7 @@ public class TokenServiceImpl implements TokenService {
 
   /**
    * Get total sp for each account.
+   *
    * @return List.
    */
   @Override
@@ -84,6 +86,7 @@ public class TokenServiceImpl implements TokenService {
 
   /**
    * Get count by date.
+   *
    * @param date date.
    * @return count of data.
    */
