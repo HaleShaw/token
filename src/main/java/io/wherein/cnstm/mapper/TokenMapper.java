@@ -14,12 +14,15 @@ public interface TokenMapper {
 
   /**
    * Get token by date.
+   *
+   * @param date date.
    * @return List.
    */
-  List<Map<String,Object>> getCurrentToken(@Param(value="date") String date);
+  List<Map<String, Object>> getTokenByDate(@Param(value = "date") String date);
 
   /**
-   * Get total sp for each account.
+   * Get total sps for each account.
+   *
    * @return List.
    */
   List<Map<String, Object>> getTotalSP();

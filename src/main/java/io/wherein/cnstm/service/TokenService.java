@@ -15,7 +15,7 @@ public interface TokenService {
    *
    * @return List.
    */
-  List<Map<String, Object>> getCurrentToken(String date);
+  List<Map<String, Object>> getTokenByDate(String date);
 
   /**
    * Get total sp for each account.
@@ -40,4 +40,9 @@ public interface TokenService {
   int getCountByDate(String date);
 
   void addSP(List list);
+
+  /**
+   * Sync from steem.
+   */
+  void syncFromSteem();
 }

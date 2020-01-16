@@ -21,7 +21,7 @@
     FROM token
   </select>
 
-  <select id="getCurrentToken" parameterType="java.lang.String" resultType="java.util.HashMap">
+  <select id="getTokenByDate" parameterType="java.lang.String" resultType="java.util.HashMap">
     SELECT ( @i := @i + 1 ) AS ID, steem_id, sp, sp /( ts.total_sp * 7200 ) AS token, agent_time
     FROM
       token,

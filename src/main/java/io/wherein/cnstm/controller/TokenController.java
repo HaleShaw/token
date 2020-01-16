@@ -3,6 +3,9 @@ package io.wherein.cnstm.controller;
 import io.wherein.cnstm.mapper.TokenMapper;
 import io.wherein.cnstm.service.impl.TokenServiceImpl;
 import io.wherein.cnstm.utils.DateTimeUtils;
+import io.wherein.cnstm.utils.HttpClientUtils;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -66,7 +69,7 @@ public class TokenController {
    */
   @PutMapping("/sync")
   public void syncFromSteem() {
-
+    tokenService.syncFromSteem();
   }
 
   @GetMapping("/totalSP")
@@ -76,11 +79,12 @@ public class TokenController {
 
   @GetMapping("/ctoken")
   public List<Map<String, Object>> getCurrentToken() {
-    return tokenService.getCurrentToken("2019-12-11");
+    return tokenService.getTokenByDate("2019-12-11");
   }
 
   @GetMapping("/test")
-  public String test() {
-    return tokenMapper.getLastDate();
+  public String test() throws IOException, URISyntaxException {
+    return HttpClientUtils.doGet(
+        "http://uploadbeta.com/api/steemit/delegators/?cached&id=cnstm&hash=bcee701f176a53ac73463f1fd826431b");
   }
 }
