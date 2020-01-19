@@ -46,7 +46,7 @@
   <insert id="addSP" parameterType="java.util.ArrayList">
     insert into `token`(steem_id,sp,log_time,agent_time) values
     <foreach collection="list" index="index" separator="," item="item">
-      (#{item.delegator},#{item.sp},now(),#{item.time})
+      (#{item.delegator},#{item.sp},date_sub(curdate(),interval 1 day),#{item.time})
     </foreach>
   </insert>
 

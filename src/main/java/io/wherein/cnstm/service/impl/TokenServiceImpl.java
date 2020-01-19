@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +114,9 @@ public class TokenServiceImpl implements TokenService {
   @Override
   public void syncFromSteem() {
     SimpleDateFormat dateFormatDay = new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY);
-    String date = dateFormatDay.format(new Date());
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.DATE, -1);
+    String date = dateFormatDay.format(calendar.getTime());
     int count = getCountByDate(date);
     if (count != 0) {
       log.info("There is already the data for today!");

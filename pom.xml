@@ -80,10 +80,40 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <!-- 打包时将jsp文件拷贝到META-INF目录下-->
+        <!-- 指定resources插件处理哪个目录下的资源文件 -->
+        <directory>src/main/webapp</directory>
+        <!--注意此次必须要放在此目录下才能被访问到-->
+        <targetPath>META-INF/resources</targetPath>
+        <includes>
+          <include>**/**</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/**</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <!--这里写上main方法所在类的路径-->
+        <!--<configuration>
+          <mainClass>io.wherein.cnstm.CnstmApplication</mainClass>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>-->
       </plugin>
     </plugins>
   </build>
