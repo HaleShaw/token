@@ -1,4 +1,4 @@
-package io.wherein.cnstm.mapper;
+package io.wherein.token.mapper;
 
 import java.util.List;
 import java.util.Map;

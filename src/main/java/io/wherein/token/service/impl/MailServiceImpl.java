@@ -1,6 +1,6 @@
-package io.wherein.cnstm.service.impl;
+package io.wherein.token.service.impl;
 
-import io.wherein.cnstm.service.MailService;
+import io.wherein.token.service.MailService;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -10,10 +10,10 @@
     <relativePath/>
   </parent>
   <groupId>io.wherein</groupId>
-  <artifactId>cnstm</artifactId>
+  <artifactId>token</artifactId>
   <version>0.0.1</version>
-  <name>cnstm</name>
-  <description>Project for token of cnstm</description>
+  <name>token</name>
+  <description>Project for token</description>
 
   <properties>
     <java.version>1.8</java.version>

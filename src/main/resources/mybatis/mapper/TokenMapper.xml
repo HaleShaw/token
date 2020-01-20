@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.wherein.cnstm.mapper.TokenMapper">
+<mapper namespace="io.wherein.token.mapper.TokenMapper">
 
   <select id="getTokenByDate" parameterType="java.lang.String" resultType="java.util.HashMap">
     SELECT ( @i := @i + 1 ) AS ID, steem_id, sp, sp /( ts.total_sp * 7200 ) AS token, agent_time

@@ -1,4 +1,4 @@
-package io.wherein.cnstm.utils;
+package io.wherein.token.utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

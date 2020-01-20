@@ -1,4 +1,4 @@
-package io.wherein.cnstm.service;
+package io.wherein.token.service;
 
 /**
  * Mail Service.

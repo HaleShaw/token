@@ -1,6 +1,6 @@
-package io.wherein.cnstm.schedule;
+package io.wherein.token.schedule;
 
-import io.wherein.cnstm.service.impl.TokenServiceImpl;
+import io.wherein.token.service.impl.TokenServiceImpl;
 import javax.annotation.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

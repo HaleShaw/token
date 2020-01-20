@@ -1,4 +1,4 @@
-package io.wherein.cnstm;
+package io.wherein.token;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

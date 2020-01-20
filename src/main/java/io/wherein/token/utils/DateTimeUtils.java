@@ -1,4 +1,4 @@
-package io.wherein.cnstm.utils;
+package io.wherein.token.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
