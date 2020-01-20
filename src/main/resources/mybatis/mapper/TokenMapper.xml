@@ -4,7 +4,7 @@
 <mapper namespace="io.wherein.token.mapper.TokenMapper">
 
   <select id="getTokenByDate" parameterType="java.lang.String" resultType="java.util.HashMap">
-    SELECT ( @i := @i + 1 ) AS ID, steem_id, sp, sp /( ts.total_sp * 7200 ) AS token, agent_time
+    SELECT ( @i := @i + 1 ) AS ID, steem_id, sp, (sp / ts.total_sp * 7200) AS token, agent_time
     FROM
       cnstm,
       ( SELECT SUM( sp ) AS total_sp FROM cnstm WHERE log_time = #{date}) AS ts,
