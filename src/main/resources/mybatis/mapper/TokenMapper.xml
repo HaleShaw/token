@@ -6,8 +6,8 @@
   <select id="getTokenByDate" parameterType="java.lang.String" resultType="java.util.HashMap">
     SELECT ( @i := @i + 1 ) AS ID, steem_id, sp, sp /( ts.total_sp * 7200 ) AS token, agent_time
     FROM
-      token,
-      ( SELECT SUM( sp ) AS total_sp FROM token WHERE log_time = #{date}) AS ts,
+      cnstm,
+      ( SELECT SUM( sp ) AS total_sp FROM cnstm WHERE log_time = #{date}) AS ts,
       ( SELECT @i := 0 ) AS t
     WHERE
       log_time = #{date}
@@ -16,23 +16,23 @@
   </select>
 
   <select id="getTotalSP" resultType="java.util.HashMap">
-    SELECT steem_id, SUM(sp) AS totalSP FROM token GROUP BY steem_id
+    SELECT steem_id, SUM(sp) AS totalSP FROM cnstm GROUP BY steem_id
   </select>
 
   <select id="getCountByDate" parameterType="java.lang.String" resultType="int">
-    SELECT COUNT(*) FROM token
+    SELECT COUNT(*) FROM cnstm
     WHERE
         log_time = #{date}
   </select>
 
   <insert id="addSP" parameterType="java.util.ArrayList">
-    insert into `token`(steem_id,sp,log_time,agent_time) values
+    insert into `cnstm`(steem_id,sp,log_time,agent_time) values
     <foreach collection="list" index="index" separator="," item="item">
       (#{item.delegator},#{item.sp},date_sub(curdate(),interval 1 day),#{item.time})
     </foreach>
   </insert>
 
   <select id="getLastDate" resultType="String">
-    SELECT log_time FROM token WHERE id=(SELECT MAX(id) FROM token);
+    SELECT log_time FROM cnstm WHERE id=(SELECT MAX(id) FROM cnstm);
   </select>
 </mapper>
