@@ -1,5 +1,7 @@
 package io.wherein.cnstm.service;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +31,7 @@ public interface TokenService {
    *
    * @return List.
    */
-  List<Map> getSPFromSteem();
+  List<Map> getSPFromSteem() throws IOException, URISyntaxException;
 
   /**
    * Get count by date.

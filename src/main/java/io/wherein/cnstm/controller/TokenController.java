@@ -1,6 +1,5 @@
 package io.wherein.cnstm.controller;
 
-import io.wherein.cnstm.mapper.TokenMapper;
 import io.wherein.cnstm.service.impl.TokenServiceImpl;
 import io.wherein.cnstm.utils.DateTimeUtils;
 import java.util.List;
@@ -22,9 +21,6 @@ public class TokenController {
 
   @Resource
   private TokenServiceImpl tokenService;
-
-  @Resource
-  private TokenMapper tokenMapper;
 
   /**
    * Get the sorted data.

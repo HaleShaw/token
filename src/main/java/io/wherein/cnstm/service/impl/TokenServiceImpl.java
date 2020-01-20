@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +30,14 @@ public class TokenServiceImpl implements TokenService {
   @Value("${url}")
   private String url;
 
+  @Value("${spring.mail.properties.toAddr}")
+  private String toAddr;
+
   @Resource
   private TokenMapper tokenMapper;
+
+  @Resource
+  private MailServiceImpl mailService;
 
   @Override
   public List<Map<String, Object>> getAll(String date) {
@@ -77,15 +83,18 @@ public class TokenServiceImpl implements TokenService {
    * @return List.
    */
   @Override
-  public List<Map> getSPFromSteem() {
-    List<Map> sp = new ArrayList<>(1);
+  public List<Map> getSPFromSteem() throws IOException, URISyntaxException, JSONException {
+    String response = null;
+    List<Map> sp = null;
     try {
-      String response = HttpClientUtils.doGet(url);
+      response = HttpClientUtils.doGet(url);
       sp = JSON.parseArray(response, Map.class);
     } catch (URISyntaxException | IOException e) {
       log.error("Http request error!", e);
+      throw e;
     } catch (JSONException e) {
       log.error("Parse JSON error!", e);
+      throw e;
     }
     return sp;
   }
@@ -119,10 +128,19 @@ public class TokenServiceImpl implements TokenService {
     String date = dateFormatDay.format(calendar.getTime());
     int count = getCountByDate(date);
     if (count != 0) {
-      log.info("There is already the data for today!");
+      log.info("There is already the data for {}!", date);
       return;
     }
-    List<Map> spFromSteem = getSPFromSteem();
+    List<Map> spFromSteem = null;
+    try {
+      spFromSteem = getSPFromSteem();
+    } catch (URISyntaxException | IOException | JSONException e) {
+      String time =
+          "GMT+8:00 " + new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY_TIME).format(new Date());
+      String content = "Hi,\nFailed to synchronize data of " + date + " from Steemit at " + time
+          + ".\nFollowing is the error log.\n\n" + e.toString();
+      mailService.sendMail(toAddr, "[System mail] Sync SP from Steemit failed", content);
+    }
     addSP(spFromSteem);
   }
 }

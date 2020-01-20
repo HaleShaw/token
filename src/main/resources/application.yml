@@ -5,6 +5,20 @@ spring:
     username: root
     password: root
 
+  mail:
+    host: smtp.mxhichina.com
+    username: system@cocozl.com
+    password: xxx
+    properties:
+      mail:
+        smtp:
+          port: 465
+          ssl.enable: true
+          starttls:
+            enable: true
+            required: true
+      toAddr: yinguozi925107@126.com
+
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml

@@ -1,6 +1,5 @@
 package io.wherein.cnstm.mapper;
 
-import io.wherein.cnstm.model.Token;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Param;
@@ -9,8 +8,6 @@ import org.apache.ibatis.annotations.Param;
  * Token Mapper.
  */
 public interface TokenMapper {
-
-  List<Token> getAll();
 
   /**
    * Get token by date.

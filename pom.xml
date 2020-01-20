@@ -7,7 +7,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.2.2.RELEASE</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath/>
   </parent>
   <groupId>io.wherein</groupId>
   <artifactId>cnstm</artifactId>
@@ -66,6 +66,7 @@
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
+    
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -77,15 +78,17 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
     <resources>
       <resource>
-        <!-- 打包时将jsp文件拷贝到META-INF目录下-->
-        <!-- 指定resources插件处理哪个目录下的资源文件 -->
         <directory>src/main/webapp</directory>
-        <!--注意此次必须要放在此目录下才能被访问到-->
         <targetPath>META-INF/resources</targetPath>
         <includes>
           <include>**/**</include>
@@ -103,17 +106,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <!--这里写上main方法所在类的路径-->
-        <!--<configuration>
-          <mainClass>io.wherein.cnstm.CnstmApplication</mainClass>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>-->
       </plugin>
     </plugins>
   </build>

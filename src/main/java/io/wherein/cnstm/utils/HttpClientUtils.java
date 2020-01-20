@@ -3,6 +3,7 @@ package io.wherein.cnstm.utils;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,6 +16,7 @@ import org.apache.http.util.EntityUtils;
 /**
  * HttpClient Util.
  */
+@Slf4j
 public class HttpClientUtils {
 
   /**
@@ -27,12 +29,12 @@ public class HttpClientUtils {
    */
   public static String doGet(String url)
       throws URISyntaxException, IOException {
+    log.debug("Http request url: {}", url);
     CloseableHttpClient httpClient = null;
     CloseableHttpResponse httpResponse = null;
-    HttpGet httpGet = null;
     try {
       URIBuilder uriBuilder = new URIBuilder(url);
-      httpGet = new HttpGet(uriBuilder.build());
+      HttpGet httpGet = new HttpGet(uriBuilder.build());
       RequestConfig.Builder requestConfig = RequestConfig.custom();
       httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig.build()).build();
 
@@ -56,6 +58,7 @@ public class HttpClientUtils {
         content = EntityUtils.toString(httpResponse.getEntity(), StandardCharsets.UTF_8);
       }
     }
+    log.debug("Http response: {}", content);
     return content;
   }
 }

@@ -2,24 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="io.wherein.cnstm.mapper.TokenMapper">
-  <resultMap id="BaseResultMap" type="io.wherein.cnstm.model.Token">
-    <id column="id" property="id" jdbcType="INTEGER"/>
-    <result column="steem_id" property="steemId" jdbcType="VARCHAR"/>
-    <result column="sp" property="sp" jdbcType="DECIMAL"/>
-    <result column="token" property="token" jdbcType="DECIMAL"/>
-    <result column="log_time" property="log_time" javaType="DATE"/>
-    <result column="agent_time" property="agent_time" jdbcType="DATE"/>
-  </resultMap>
-
-  <sql id="Base_Column_List">
-        id, steem_id, sp, sp/7200 token, log_time, agent_time
-    </sql>
-
-  <select id="getAll" resultMap="BaseResultMap">
-    SELECT
-    <include refid="Base_Column_List"/>
-    FROM token
-  </select>
 
   <select id="getTokenByDate" parameterType="java.lang.String" resultType="java.util.HashMap">
     SELECT ( @i := @i + 1 ) AS ID, steem_id, sp, sp /( ts.total_sp * 7200 ) AS token, agent_time

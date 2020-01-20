@@ -14,6 +14,7 @@ public class DateTimeUtils {
 
   public static final String DATE_FORMAT_TIME = "HH:mm";
   public static final String DATE_FORMAT_DAY = "yyyy-MM-dd";
+  public static final String DATE_FORMAT_DAY_TIME = "yyyy-MM-dd HH:mm:ss";
   public static final String SYNC_TIME = "08:05";
 
   /**
