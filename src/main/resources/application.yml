@@ -22,13 +22,12 @@ spring:
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: io.wherein.cnstm.model
 
 logging:
   level:
     io:
       wherein:
-        cnstm:
+        token:
           mapper: debug
 
 url: http://uploadbeta.com/api/steemit/delegators/?cached&id=cnstm&hash=bcee701f176a53ac73463f1fd826431b
