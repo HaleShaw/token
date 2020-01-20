@@ -138,7 +138,8 @@ public class TokenServiceImpl implements TokenService {
       String time =
           "GMT+8:00 " + new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY_TIME).format(new Date());
       String content = "Hi,\nFailed to synchronize data of " + date + " from Steemit at " + time
-          + ".\nFollowing is the error log.\n\n" + e.toString();
+          + ".\nFollowing is the error log.\n\n" + e.toString()
+          + "\n\nSystem mail, please do not reply.";
       mailService.sendMail(toAddr, "[System mail] Sync SP from Steemit failed", content);
     }
     addSP(spFromSteem);
