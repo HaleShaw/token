@@ -35,8 +35,9 @@ async function makeTable() {
   for (let i in delegators) {
     totalToken += delegators[i].token;
     totalTokenAllDays += delegators[i].totalToken;
+    let number = Number(i) + 1;
     s += '<tr>';
-    s += '<td>' + delegators[i].ID + '</td>';
+    s += '<td>' + number + '</td>';
     s += '<td><a target=_blank rel=nofollow href="https://steemit.com/@'
         + delegators[i].steem_id + '">@' + delegators[i].steem_id
         + '</a><BR/></td>';

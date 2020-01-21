@@ -12,7 +12,6 @@ import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -42,18 +41,6 @@ public class TokenServiceImpl implements TokenService {
   @Override
   public List<Map<String, Object>> getAll(String date) {
     List<Map<String, Object>> tokens = tokenMapper.getTokenByDate(date);
-    List<Map<String, Object>> totalSP = tokenMapper.getTotalSP();
-    Map<String, BigDecimal> sPs = new HashMap<>(128);
-    for (Map<String, Object> sp : totalSP) {
-      sPs.put(sp.get("steem_id").toString(), new BigDecimal(sp.get("totalToken").toString()));
-    }
-
-    for (Map<String, Object> token : tokens) {
-      String steemId = token.get("steem_id").toString();
-      if (sPs.containsKey(steemId)) {
-        token.put("totalToken", new BigDecimal(sPs.get(steemId).toString()));
-      }
-    }
     return tokens;
   }
 
