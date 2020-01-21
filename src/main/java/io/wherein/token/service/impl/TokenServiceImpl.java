@@ -45,7 +45,7 @@ public class TokenServiceImpl implements TokenService {
     List<Map<String, Object>> totalSP = tokenMapper.getTotalSP();
     Map<String, BigDecimal> sPs = new HashMap<>(128);
     for (Map<String, Object> sp : totalSP) {
-      sPs.put(sp.get("steem_id").toString(), new BigDecimal(sp.get("totalSP").toString()));
+      sPs.put(sp.get("steem_id").toString(), new BigDecimal(sp.get("totalToken").toString()));
     }
 
     for (Map<String, Object> token : tokens) {
@@ -141,6 +141,21 @@ public class TokenServiceImpl implements TokenService {
           + ".\nFollowing is the error log.\n\n" + e.toString()
           + "\n\nSystem mail, please do not reply.";
       mailService.sendMail(toAddr, "[System mail] Sync SP from Steemit failed", content);
+    }
+    if (spFromSteem != null && !spFromSteem.isEmpty()) {
+      BigDecimal totalSP = BigDecimal.ZERO;
+      // Get total sp.
+      for (Map<String, Object> delegator : spFromSteem) {
+        totalSP = totalSP.add(new BigDecimal(delegator.get("sp").toString()));
+      }
+
+      // Calculate token.
+      for (Map<String, Object> delegator : spFromSteem) {
+        BigDecimal sp = new BigDecimal(delegator.get("sp").toString());
+        BigDecimal divide = sp.divide(totalSP, 15, BigDecimal.ROUND_HALF_UP);
+        BigDecimal token = divide.multiply(new BigDecimal("7200"));
+        delegator.put("token", token);
+      }
     }
     addSP(spFromSteem);
   }

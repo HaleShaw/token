@@ -27,11 +27,14 @@ async function makeTable() {
   let delegators = await getDelegators();
   let totalSp = await getTotalSp(delegators);
   let totalToken = 0;
-  var s = '<h4><B>' + delegators.length + '</B> Delegator(s) <div id="stats"> </div></h4>';
+  let totalTokenAllDays = 0;
+  var s = '<h4><B>' + delegators.length
+      + '</B> Delegator(s) <div id="stats"> </div></h4>';
   s += '<table id="dvlist" class="sortable">';
   s += '<thead><tr><th>NO.</th><th>Steem ID</th><th>SP权重</th><th>代理时间</th><th>总令牌数</th><th>今日令牌数量</th></tr></thead><tbody>';
   for (let i in delegators) {
     totalToken += delegators[i].token;
+    totalTokenAllDays += delegators[i].totalToken;
     s += '<tr>';
     s += '<td>' + delegators[i].ID + '</td>';
     s += '<td><a target=_blank rel=nofollow href="https://steemit.com/@'
@@ -47,8 +50,8 @@ async function makeTable() {
   s += '</tbody>';
   s += '<tfoot><tr>';
   s += '<th>Total: </th><th></th><th>' + totalSp.toFixed(2)
-      + ' SP</th><th></th><th></th><th>' + totalToken.toFixed(2)
-      + ' IN</th>';
+      + ' SP</th><th></th><th>' + totalTokenAllDays.toFixed(2)
+      + '</th><th>' + totalToken.toFixed(2) + ' IN</th>';
   s += '</tr></tfoot>';
   s += '</table>';
   $('div#ascii').html(s);

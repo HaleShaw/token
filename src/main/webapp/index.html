@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" href="http://cocozl.cn/wp-content/themes/Autumn/static/images/favicon.ico"
+        type="image/x-icon"/>
+  <link rel="shortcut icon"
+        href="http://cocozl.cn/wp-content/themes/Autumn/static/images/favicon.ico"
+        type="image/x-icon"/>
   <link rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
@@ -17,13 +22,29 @@
 
     td,
     th {
-      border: 1px solid #dddddd;
+      border: 1px solid #ccc;
       text-align: left;
       padding: 8px;
     }
 
     tr:nth-child(even) {
-      background-color: #dddddd;
+      background-color: #eee;
+    }
+
+    footer > div {
+      margin: 2em 2em;
+      text-align: center;
+      text-decoration: none;
+      font-size: 0.85em;
+      font-family: "Microsoft YaHei";
+    }
+
+    footer > div > a {
+      color: #000;
+    }
+
+    footer > div > a:hover {
+      text-decoration: none;
     }
   </style>
 </head>
@@ -33,6 +54,11 @@
   <button onclick="download()">Download CSV</button>
   <div style='width:100%' name='ascii' id='ascii'></div>
 </div>
+<footer>
+  <div>
+    <a href="http://cocozl.cn/" target="_blank">成都比特跳动科技有限公司</a><span> Copyright © 2020</span>
+  </div>
+</footer>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="js/sorttable.js"></script>
