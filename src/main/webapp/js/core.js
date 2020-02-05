@@ -1,5 +1,14 @@
 let delegators = [];
-makeTable()
+let cnstmDelegators = [];
+let whereInDelegators = [];
+let account = "";
+const cnstmAccount = "cnstm";
+const whereInAccount = "wherein";
+
+
+createTable(cnstmAccount);
+createTable(whereInAccount);
+// makeTable();
 
 function getTotalSp(delegators) {
   return new Promise((resolve, reject) => {
@@ -11,26 +20,38 @@ function getTotalSp(delegators) {
   });
 }
 
-function getDelegators() {
+function getDelegators(account) {
   return new Promise((resolve, reject) => {
     const url = window.location.href + "token/summary";
     axios.get(url).then(function (response) {
       if (response.status == 200) {
         delegators = response.data;
+        if("wherein" == account){
+          delegators = [];
+        }
         resolve(delegators);
       }
     });
   });
 }
 
-async function makeTable() {
-  let delegators = await getDelegators();
+async function createTable(account) {
+  let delegators = await getDelegators(account);
+  if("cnstm" == account){
+    cnstmDelegators = delegators;
+  }
+  else if("wherein" == account){
+    whereInDelegators = delegators;
+  }
   let totalSp = await getTotalSp(delegators);
   let totalToken = 0;
   let totalTokenAllDays = 0;
-  var s = '<h4><B>' + delegators.length
-      + '</B> Delegator(s) <div id="stats"> </div></h4>';
-  s += '<table id="dvlist" class="sortable">';
+  const tableId = account + "Table";
+  let statsDiv = $('div#' + account).prev();
+  var statsDivHtml = statsDiv.html() + '<br /><a><b>' + delegators.length + '</b> Delegator(s)</a><br /><a>' + totalSp.toFixed(2) + ' SP</a>';
+  statsDiv.html(statsDivHtml);
+  var s = '<div><a><b>' + delegators.length + '</b> Delegator(s)</a><br /><a>' + totalSp.toFixed(2) + ' SP</a></div>';
+  s = '<table id="' + tableId + '" class="sortable">';
   s += '<thead><tr><th>NO.</th><th>Steem ID</th><th>SP权重</th><th>代理时间</th><th>总令牌数</th><th>今日令牌数量</th></tr></thead><tbody>';
   for (let i in delegators) {
     totalToken += delegators[i].token;
@@ -45,7 +66,6 @@ async function makeTable() {
     s += '<td>' + delegators[i].agent_time + '</td>';
     s += '<td>' + (delegators[i].totalToken).toFixed(2) + '</td>';
     s += '<td>' + (delegators[i].token).toFixed(2) + '</td>';
-
     s += '</tr>';
   }
   s += '</tbody>';
@@ -55,13 +75,17 @@ async function makeTable() {
       + '</th><th>' + totalToken.toFixed(2) + ' IN</th>';
   s += '</tr></tfoot>';
   s += '</table>';
-  $('div#ascii').html(s);
-  sorttable.makeSortable(document.getElementById("dvlist"));
-  $('div#stats').html(totalSp.toFixed(2) + " SP");
-
+  $('div#' + account).html(s);
+  sorttable.makeSortable(document.getElementById(tableId));
 }
 
-function download() {
+function download(account) {
+  if("cnstm" == account){
+    delegators = cnstmDelegators;
+  }
+  else if("wherein" == account){
+    delegators = whereInDelegators;
+  }
   let dataCSV = "\ufeffNO.,Steem ID,SP权重,代理时间,总令牌数,今日令牌数量\n";
   let i = 1;
 
