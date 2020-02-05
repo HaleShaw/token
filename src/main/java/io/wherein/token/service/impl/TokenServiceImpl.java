@@ -39,8 +39,8 @@ public class TokenServiceImpl implements TokenService {
   private MailServiceImpl mailService;
 
   @Override
-  public List<Map<String, Object>> getAll(String date) {
-    List<Map<String, Object>> tokens = tokenMapper.getTokenByDate(date);
+  public List<Map<String, Object>> getAll(String account, String date) {
+    List<Map<String, Object>> tokens = tokenMapper.getTokenByDate(account,date);
     return tokens;
   }
 
@@ -50,18 +50,8 @@ public class TokenServiceImpl implements TokenService {
    * @return List.
    */
   @Override
-  public List<Map<String, Object>> getTokenByDate(String date) {
-    return tokenMapper.getTokenByDate(date);
-  }
-
-  /**
-   * Get total sp for each account.
-   *
-   * @return List.
-   */
-  @Override
-  public List<Map<String, Object>> getTotalSP() {
-    return tokenMapper.getTotalSP();
+  public List<Map<String, Object>> getTokenByDate(String account,String date) {
+    return tokenMapper.getTokenByDate(account,date);
   }
 
   /**

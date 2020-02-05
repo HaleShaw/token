@@ -10,21 +10,14 @@ import java.util.Map;
  */
 public interface TokenService {
 
-  List<Map<String, Object>> getAll(String date);
+  List<Map<String, Object>> getAll(String account,String date);
 
   /**
    * Get token by date.
    *
    * @return List.
    */
-  List<Map<String, Object>> getTokenByDate(String date);
-
-  /**
-   * Get total sp for each account.
-   *
-   * @return List.
-   */
-  List<Map<String, Object>> getTotalSP();
+  List<Map<String, Object>> getTokenByDate(String account,String date);
 
   /**
    * Get sp from steem of current day.

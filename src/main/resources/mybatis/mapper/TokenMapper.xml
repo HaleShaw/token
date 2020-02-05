@@ -11,19 +11,15 @@
       IFNULL( bb.token, 0 ) AS token,
       aa.agent_time
     FROM
-      ( SELECT steem_id, SUM( token ) AS totalToken, agent_time FROM cnstm GROUP BY steem_id ) AS aa
-      LEFT JOIN ( SELECT steem_id, sp, token FROM cnstm WHERE log_time = #{date} ) AS bb ON aa.steem_id = bb.steem_id
+      ( SELECT steem_id, SUM( token ) AS totalToken, agent_time FROM ${account} WHERE log_time &lt;= #{date} GROUP BY steem_id ) AS aa
+      LEFT JOIN ( SELECT steem_id, sp, token FROM ${account} WHERE log_time = #{date} ) AS bb ON aa.steem_id = bb.steem_id
     ORDER BY
       bb.sp DESC,
       aa.totalToken DESC
   </select>
 
-  <select id="getTotalSP" resultType="java.util.HashMap">
-    SELECT steem_id, SUM(token) AS totalToken, agent_time FROM cnstm GROUP BY steem_id
-  </select>
-
   <select id="getCountByDate" parameterType="java.lang.String" resultType="int">
-    SELECT COUNT(*) FROM cnstm
+    SELECT COUNT(*) FROM ${account}
     WHERE
         log_time = #{date}
   </select>

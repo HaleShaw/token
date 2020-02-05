@@ -1,0 +1,25 @@
+package io.wherein.token.utils;
+
+/**
+ * String utils.
+ */
+public class StringUtils {
+
+  private final static String ACCOUNT_CNSTM = "cnstm";
+  private final static String ACCOUNT_wherein = "wherein";
+
+  /**
+   * Validate whether the account is available.
+   *
+   * @param account account.
+   */
+  public static boolean accountIsAvailable(String account) {
+    if (org.apache.commons.lang3.StringUtils.isBlank(account) || (
+        !ACCOUNT_CNSTM.equalsIgnoreCase(account)
+            && !ACCOUNT_wherein.equalsIgnoreCase(account))) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+}
