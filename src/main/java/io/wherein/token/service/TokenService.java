@@ -20,13 +20,15 @@ public interface TokenService {
   /**
    * Get sp from steem of current day.
    *
+   * @param account account.
    * @return List.
    */
-  List<Map> getSPFromSteem() throws IOException, URISyntaxException;
+  List<Map> getSPFromSteem(String account) throws IOException, URISyntaxException;
 
   /**
    * Get count by date.
    *
+   * @param account account.
    * @param date date.
    * @return count of data.
    */

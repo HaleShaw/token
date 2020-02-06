@@ -24,6 +24,7 @@ public interface TokenMapper {
   /**
    * Get count by date.
    *
+   * @param account account.
    * @param date date.
    * @return count of data.
    */
@@ -32,5 +33,5 @@ public interface TokenMapper {
   /**
    * Get last date.
    */
-  String getLastDate();
+  String getLastDate(@Param(value = "account") String account);
 }

@@ -30,4 +30,4 @@ logging:
         token:
           mapper: debug
 
-url: http://uploadbeta.com/api/steemit/delegators/?cached&id=cnstm&hash=bcee701f176a53ac73463f1fd826431b
+url: http://uploadbeta.com/api/steemit/delegators/?cached&id=%s&hash=bcee701f176a53ac73463f1fd826431b

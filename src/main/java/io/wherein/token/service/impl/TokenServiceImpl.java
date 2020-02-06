@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -51,14 +52,17 @@ public class TokenServiceImpl implements TokenService {
   /**
    * Get sp from steem of current day.
    *
+   * @param account account.
    * @return List.
    */
   @Override
-  public List<Map> getSPFromSteem() throws IOException, URISyntaxException, JSONException {
+  public List<Map> getSPFromSteem(String account)
+      throws IOException, URISyntaxException, JSONException {
     String response = null;
     List<Map> sp = null;
+    String realURL = String.format(Locale.ENGLISH, url, account);
     try {
-      response = HttpClientUtils.doGet(url);
+      response = HttpClientUtils.doGet(realURL);
       sp = JSON.parseArray(response, Map.class);
     } catch (URISyntaxException | IOException e) {
       log.error("Http request error!", e);
@@ -73,6 +77,7 @@ public class TokenServiceImpl implements TokenService {
   /**
    * Get count by date.
    *
+   * @param account account.
    * @param date date.
    * @return count of data.
    */
@@ -106,7 +111,7 @@ public class TokenServiceImpl implements TokenService {
     }
     List<Map> spFromSteem = null;
     try {
-      spFromSteem = getSPFromSteem();
+      spFromSteem = getSPFromSteem(account);
     } catch (URISyntaxException | IOException | JSONException e) {
       String time =
           "GMT+8:00 " + new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY_TIME).format(new Date());
