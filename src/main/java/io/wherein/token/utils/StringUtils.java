@@ -5,8 +5,8 @@ package io.wherein.token.utils;
  */
 public class StringUtils {
 
-  private final static String ACCOUNT_CNSTM = "cnstm";
-  private final static String ACCOUNT_wherein = "wherein";
+  public final static String ACCOUNT_CNSTM = "cnstm";
+  public final static String ACCOUNT_wherein = "wherein";
 
   /**
    * Validate whether the account is available.

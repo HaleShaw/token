@@ -38,20 +38,14 @@ public class TokenServiceImpl implements TokenService {
   @Resource
   private MailServiceImpl mailService;
 
-  @Override
-  public List<Map<String, Object>> getAll(String account, String date) {
-    List<Map<String, Object>> tokens = tokenMapper.getTokenByDate(account,date);
-    return tokens;
-  }
-
   /**
    * Get token by date.
    *
    * @return List.
    */
   @Override
-  public List<Map<String, Object>> getTokenByDate(String account,String date) {
-    return tokenMapper.getTokenByDate(account,date);
+  public List<Map<String, Object>> getTokenByDate(String account, String date) {
+    return tokenMapper.getTokenByDate(account, date);
   }
 
   /**
@@ -83,8 +77,8 @@ public class TokenServiceImpl implements TokenService {
    * @return count of data.
    */
   @Override
-  public int getCountByDate(String date) {
-    return tokenMapper.getCountByDate(date);
+  public int getCountByDate(String account, String date) {
+    return tokenMapper.getCountByDate(account, date);
   }
 
   @Override
@@ -96,14 +90,16 @@ public class TokenServiceImpl implements TokenService {
 
   /**
    * Sync from steem.
+   *
+   * @param account account.
    */
   @Override
-  public void syncFromSteem() {
+  public void syncFromSteem(String account) {
     SimpleDateFormat dateFormatDay = new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY);
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.DATE, -1);
     String date = dateFormatDay.format(calendar.getTime());
-    int count = getCountByDate(date);
+    int count = getCountByDate(account, date);
     if (count != 0) {
       log.info("There is already the data for {}!", date);
       return;

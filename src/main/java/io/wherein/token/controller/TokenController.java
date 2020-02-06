@@ -42,7 +42,7 @@ public class TokenController {
       String msg = "Date " + date + " is invalid!";
       return createErrReturn(msg);
     }
-    return tokenService.getAll(account, date);
+    return tokenService.getTokenByDate(account, date);
   }
 
   /**
@@ -61,9 +61,14 @@ public class TokenController {
 
   /**
    * Sync from steem manually.
+   *
+   * @param account account.
    */
   @PutMapping("/sync")
-  public void syncFromSteem() {
-    tokenService.syncFromSteem();
+  public void syncFromSteem(@RequestParam(name = "account") String account) {
+    if (!StringUtils.accountIsAvailable(account)) {
+      return;
+    }
+    tokenService.syncFromSteem(account);
   }
 }

@@ -1,6 +1,7 @@
 package io.wherein.token.schedule;
 
 import io.wherein.token.service.impl.TokenServiceImpl;
+import io.wherein.token.utils.StringUtils;
 import javax.annotation.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,6 @@ public class SyncSchedule {
    */
   @Scheduled(cron = "0 0 8 * * ?")
   private void process() {
-    tokenService.syncFromSteem();
+    tokenService.syncFromSteem(StringUtils.ACCOUNT_CNSTM);
   }
 }

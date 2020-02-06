@@ -69,6 +69,7 @@ public class DateTimeUtils {
    * @param date date string, "2012-01-31".
    */
   public static boolean validateDate(String date) {
+    // TODO validate the start time and end time.
     if (StringUtils.isBlank(date)) {
       return false;
     }

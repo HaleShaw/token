@@ -16,7 +16,8 @@ public interface TokenMapper {
    * @param date date.
    * @return List.
    */
-  List<Map<String, Object>> getTokenByDate(@Param(value = "account")String account,@Param(value = "date") String date);
+  List<Map<String, Object>> getTokenByDate(@Param(value = "account") String account,
+      @Param(value = "date") String date);
 
   int addSP(List list);
 
@@ -26,7 +27,7 @@ public interface TokenMapper {
    * @param date date.
    * @return count of data.
    */
-  int getCountByDate(@Param(value = "date") String date);
+  int getCountByDate(@Param(value = "account") String account, @Param(value = "date") String date);
 
   /**
    * Get last date.
