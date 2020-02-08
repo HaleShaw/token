@@ -19,7 +19,13 @@ public interface TokenMapper {
   List<Map<String, Object>> getTokenByDate(@Param(value = "account") String account,
       @Param(value = "date") String date);
 
-  int addSP(List list);
+  /**
+   * Insert sp into DB.
+   *
+   * @param account account.
+   * @param list sp of the list.
+   */
+  int insertSP(String account, List list);
 
   /**
    * Get count by date.

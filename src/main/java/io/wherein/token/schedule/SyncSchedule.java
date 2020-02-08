@@ -21,5 +21,6 @@ public class SyncSchedule {
   @Scheduled(cron = "0 0 8 * * ?")
   private void process() {
     tokenService.syncFromSteem(StringUtils.ACCOUNT_CNSTM);
+    tokenService.syncFromSteem(StringUtils.ACCOUNT_wherein);
   }
 }

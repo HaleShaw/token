@@ -34,7 +34,13 @@ public interface TokenService {
    */
   int getCountByDate(String account, String date);
 
-  void addSP(List list);
+  /**
+   * Insert sp into DB.
+   *
+   * @param account account.
+   * @param list sp of the list.
+   */
+  void insertSP(String account, List list);
 
   /**
    * Sync from steem.

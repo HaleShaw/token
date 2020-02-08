@@ -25,9 +25,6 @@ function getDelegators(account) {
     axios.get(url).then(function (response) {
       if (response.status == 200) {
         delegators = response.data;
-        if ("wherein" == account) {
-          delegators = [];
-        }
         resolve(delegators);
       }
     });

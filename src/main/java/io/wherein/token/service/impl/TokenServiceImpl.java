@@ -6,6 +6,7 @@ import io.wherein.token.mapper.TokenMapper;
 import io.wherein.token.service.TokenService;
 import io.wherein.token.utils.DateTimeUtils;
 import io.wherein.token.utils.HttpClientUtils;
+import io.wherein.token.utils.StringUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
@@ -86,10 +87,16 @@ public class TokenServiceImpl implements TokenService {
     return tokenMapper.getCountByDate(account, date);
   }
 
+  /**
+   * Insert sp into DB.
+   *
+   * @param account account.
+   * @param list sp of the list.
+   */
   @Override
-  public void addSP(List list) {
+  public void insertSP(String account, List list) {
     if (list != null && !list.isEmpty()) {
-      tokenMapper.addSP(list);
+      tokenMapper.insertSP(account, list);
     }
   }
 
@@ -115,26 +122,41 @@ public class TokenServiceImpl implements TokenService {
     } catch (URISyntaxException | IOException | JSONException e) {
       String time =
           "GMT+8:00 " + new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY_TIME).format(new Date());
-      String content = "Hi,\nFailed to synchronize data of " + date + " from Steemit at " + time
-          + ".\nFollowing is the error log.\n\n" + e.toString()
-          + "\n\nSystem mail, please do not reply.";
+      String content =
+          "Hi,\nFailed to synchronize data of " + account + " of " + date + " from Steemit at "
+              + time + ".\nFollowing is the error log.\n\n" + e.toString()
+              + "\n\nSystem mail, please do not reply.";
       mailService.sendMail(toAddr, "[System mail] Sync SP from Steemit failed", content);
     }
     if (spFromSteem != null && !spFromSteem.isEmpty()) {
       BigDecimal totalSP = BigDecimal.ZERO;
+
       // Get total sp.
       for (Map<String, Object> delegator : spFromSteem) {
-        totalSP = totalSP.add(new BigDecimal(delegator.get("sp").toString()));
+        BigDecimal sp = new BigDecimal(delegator.get("sp").toString());
+
+        // ignore the sp which is less than 100 from wherein.
+        if (StringUtils.ACCOUNT_wherein.equalsIgnoreCase(account) && sp.intValue() < 100) {
+          continue;
+        }
+        totalSP = totalSP.add(sp);
       }
 
       // Calculate token.
       for (Map<String, Object> delegator : spFromSteem) {
         BigDecimal sp = new BigDecimal(delegator.get("sp").toString());
-        BigDecimal divide = sp.divide(totalSP, 15, BigDecimal.ROUND_HALF_UP);
-        BigDecimal token = divide.multiply(new BigDecimal("7200"));
+        BigDecimal token = BigDecimal.ZERO;
+
+        if (StringUtils.ACCOUNT_CNSTM.equalsIgnoreCase(account)) {
+          BigDecimal divide = sp.divide(totalSP, 15, BigDecimal.ROUND_HALF_UP);
+          token = divide.multiply(new BigDecimal("7200"));
+        } else if (StringUtils.ACCOUNT_wherein.equalsIgnoreCase(account) && sp.intValue() >= 100) {
+          BigDecimal divide = sp.divide(totalSP, 15, BigDecimal.ROUND_HALF_UP);
+          token = divide.multiply(new BigDecimal("1800"));
+        }
         delegator.put("token", token);
       }
     }
-    addSP(spFromSteem);
+    insertSP(account, spFromSteem);
   }
 }
