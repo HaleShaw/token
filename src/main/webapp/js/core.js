@@ -24,8 +24,7 @@ function getTotalSp(delegators) {
 
 function getDelegators(account, date) {
   return new Promise((resolve, reject) => {
-    // let url = window.location.href + "token/summary?account=" + account;
-    let url = "http://localhost:8080/token/summary?account=" + account;
+    let url = window.location.href + "token/summary?account=" + account;
     if (isValid(account, date)) {
       url += "&date=" + date;
     }
