@@ -65,7 +65,6 @@ h2 {
 
 .tabs a {
   background-color: #eff0f2;
-  border-bottom: 1px solid #fff;
   color: #888;
   font-weight: 500;
   display: block;
@@ -77,6 +76,10 @@ h2 {
   -moz-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
   border-bottom: 2px solid #87d3b7;
+}
+
+.tabs a:hover {
+  background-color: #fdffff;
 }
 
 .tabs_item {
@@ -91,6 +94,59 @@ h2 {
 .active a {
   color: #fff;
   background: #87d3b7;
+}
+
+.active a:hover {
+  background: #3aa77f !important;
+  border-bottom: 2px solid #3aa77f !important;
+}
+
+/* banner */
+
+.banner {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin: 1rem 0;
+  display: none;
+  /* display: flex; */
+}
+
+.banner div {
+  text-align: center;
+  height: 36px;
+  line-height: 36px;
+}
+
+.banner a {
+  font-weight: bold;
+}
+
+.dateInput {
+  height: 36px;
+  line-height: 36px;
+}
+
+button {
+  color: #fff;
+  background: #87d3b7;
+  border: none;
+  border-color: #87d3b7;
+  padding: 0;
+  width: 87px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition-property: all;
+  transition-duration: .3s;
+}
+
+button:hover {
+  background: #3aa77f;
+  border-color: #3aa77f;
 }
 
 /* table */
@@ -128,4 +184,8 @@ footer>div>a {
 footer>div>a:hover {
   text-decoration: none;
   color: #87d3b7;
+}
+
+input[type="date"]::-webkit-clear-button {
+  display: none;
 }

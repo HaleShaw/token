@@ -23,14 +23,32 @@
 
     <div class="tab_content">
       <div class="tabs_item">
-        <div>
-          <button onclick="download('cnstm')">Download</button>
+        <div class="banner">
+          <div><a></a></div>
+          <div><a></a></div>
+          <div>
+            <input type="date" class="dateInput">
+            <button onclick="query('cnstm')">Query</button>
+          </div>
+          <div>
+            <button onclick="snapshot('cnstm')">Snapshot</button>
+            <button onclick="download('cnstm')">Download</button>
+          </div>
         </div>
         <div style='width:100%' id='cnstm'></div>
       </div>
       <div class="tabs_item">
-        <div>
-          <button onclick="download('wherein')">Download</button>
+        <div class="banner">
+          <div><a></a></div>
+          <div><a></a></div>
+          <div>
+            <input type="date" class="dateInput">
+            <button onclick="query('wherein')">Query</button>
+          </div>
+          <div>
+            <button onclick="snapshot('wherein')">Snapshot</button>
+            <button onclick="download('wherein')">Download</button>
+          </div>
         </div>
         <div style='width:100%' id='wherein'></div>
       </div>
@@ -44,6 +62,7 @@
   </footer>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <script src="js/sorttable.js"></script>
   <script src="js/tab.js"></script>
   <script src="js/core.js"></script>
