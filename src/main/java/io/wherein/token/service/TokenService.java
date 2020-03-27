@@ -46,6 +46,7 @@ public interface TokenService {
    * Sync from steem.
    *
    * @param account account.
+   * @param date date.
    */
-  void syncFromSteem(String account);
+  void syncFromSteem(String account, String date) throws IOException, URISyntaxException;
 }

@@ -29,7 +29,7 @@ public class HttpClientUtils {
    */
   public static String doGet(String url)
       throws URISyntaxException, IOException {
-    log.debug("Http request url: {}", url);
+    log.info("Http request url: {}", url);
     CloseableHttpClient httpClient = null;
     CloseableHttpResponse httpResponse = null;
     try {

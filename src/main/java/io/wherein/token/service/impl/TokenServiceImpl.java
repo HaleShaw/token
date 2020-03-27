@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -19,6 +18,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -99,38 +101,31 @@ public class TokenServiceImpl implements TokenService {
   @Override
   public void insertSP(String account, List list) {
     if (list != null && !list.isEmpty()) {
+      log.info("Insert data of {} {}:", account, JSON.toJSONString(list));
       tokenMapper.insertSP(account, list);
     }
   }
 
   /**
-   * Sync from steem.
+   * Sync from steem. The first retry will delay 10 min, second delay 20 min.
    *
    * @param account account.
    */
   @Override
-  public void syncFromSteem(String account) {
-    SimpleDateFormat dateFormatDay = new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY);
-    Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.DATE, -1);
-    String date = dateFormatDay.format(calendar.getTime());
+  @Retryable(value = {
+      Exception.class}, maxAttempts = 2, backoff = @Backoff(delay = 600000L, multiplier = 2))
+  public void syncFromSteem(String account, String date)
+      throws IOException, URISyntaxException, JSONException {
+
     int count = getCountByDate(account, date);
     if (count != 0) {
       log.info("There is already the data for {}!", date);
       return;
     }
-    List<Map> spFromSteem = null;
-    try {
-      spFromSteem = getSPFromSteem(account);
-    } catch (URISyntaxException | IOException | JSONException e) {
-      String time =
-          "GMT+8:00 " + new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY_TIME).format(new Date());
-      String content =
-          "Hi,\nFailed to synchronize data of " + account + " of " + date + " from Steemit at "
-              + time + ".\nFollowing is the error log.\n\n" + e.toString()
-              + "\n\nSystem mail, please do not reply.";
-      mailService.sendMail(toAddr, ccAddr, "[System mail] Sync SP from Steemit failed", content);
-    }
+
+    List<Map> spFromSteem = getSPFromSteem(account);
+    log.info("Data of {} from Steem: {}", account, JSON.toJSONString(spFromSteem));
+
     if (spFromSteem != null && !spFromSteem.isEmpty()) {
       BigDecimal totalSP = BigDecimal.ZERO;
 
@@ -161,5 +156,16 @@ public class TokenServiceImpl implements TokenService {
       }
     }
     insertSP(account, spFromSteem);
+  }
+
+  @Recover
+  public void recover(Exception e, String account, String date) {
+    String time =
+        "GMT+8:00 " + new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY_TIME).format(new Date());
+    String content =
+        "Hi,\nFailed to synchronize data of " + account + " of " + date + " from Steemit at "
+            + time + ".\nFollowing is the error log.\n\n" + e.toString()
+            + "\n\nSystem mail, please do not reply.";
+    mailService.sendMail(toAddr, ccAddr, "[System mail] Sync SP from Steemit failed", content);
   }
 }
