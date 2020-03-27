@@ -26,25 +26,19 @@ public class SyncSchedule {
    */
   @Scheduled(cron = "0 0 8 * * ?")
   private void process() {
-    ThreadPoolService.newTask(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          tokenService.syncFromSteemRetry(StringUtils.ACCOUNT_CNSTM);
-        } catch (IOException | URISyntaxException | JSONException e) {
-          log.error("Schedule of {} failed!", StringUtils.ACCOUNT_CNSTM);
-        }
+    ThreadPoolService.newTask(() -> {
+      try {
+        tokenService.syncFromSteemRetry(StringUtils.ACCOUNT_CNSTM);
+      } catch (IOException | URISyntaxException | JSONException e) {
+        log.error("Schedule of {} failed!", StringUtils.ACCOUNT_CNSTM);
       }
     });
 
-    ThreadPoolService.newTask(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          tokenService.syncFromSteemRetry(StringUtils.ACCOUNT_WHEREIN);
-        } catch (IOException | URISyntaxException | JSONException e) {
-          log.error("Schedule of {} failed!", StringUtils.ACCOUNT_WHEREIN);
-        }
+    ThreadPoolService.newTask(() -> {
+      try {
+        tokenService.syncFromSteemRetry(StringUtils.ACCOUNT_WHEREIN);
+      } catch (IOException | URISyntaxException | JSONException e) {
+        log.error("Schedule of {} failed!", StringUtils.ACCOUNT_WHEREIN);
       }
     });
   }
