@@ -26,14 +26,16 @@ public class MailServiceImpl implements MailService {
    * Send text mail.
    *
    * @param toAddr addressee's address.
+   * @param ccAddr address of carbon copy.
    * @param subject mail subject.
    * @param content mail content.
    */
   @Override
-  public void sendMail(String toAddr, String subject, String content) {
+  public void sendMail(String toAddr, String ccAddr, String subject, String content) {
     SimpleMailMessage message = new SimpleMailMessage();
     message.setFrom(fromAddr);
     message.setTo(toAddr);
+    message.setCc(ccAddr);
     message.setSubject(subject);
     message.setText(content);
 

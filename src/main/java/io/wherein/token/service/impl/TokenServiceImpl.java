@@ -34,6 +34,9 @@ public class TokenServiceImpl implements TokenService {
   @Value("${spring.mail.properties.toAddr}")
   private String toAddr;
 
+  @Value("${spring.mail.properties.ccAddr}")
+  private String ccAddr;
+
   @Resource
   private TokenMapper tokenMapper;
 
@@ -126,7 +129,7 @@ public class TokenServiceImpl implements TokenService {
           "Hi,\nFailed to synchronize data of " + account + " of " + date + " from Steemit at "
               + time + ".\nFollowing is the error log.\n\n" + e.toString()
               + "\n\nSystem mail, please do not reply.";
-      mailService.sendMail(toAddr, "[System mail] Sync SP from Steemit failed", content);
+      mailService.sendMail(toAddr, ccAddr, "[System mail] Sync SP from Steemit failed", content);
     }
     if (spFromSteem != null && !spFromSteem.isEmpty()) {
       BigDecimal totalSP = BigDecimal.ZERO;

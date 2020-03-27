@@ -17,7 +17,8 @@ spring:
           starttls:
             enable: true
             required: true
-      toAddr: yinguozi925107@126.com
+      toAddr: heart056571@sina.com
+      ccAddr: haleshaw@163.com
 
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
