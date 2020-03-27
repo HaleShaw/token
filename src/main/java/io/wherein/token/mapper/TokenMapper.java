@@ -24,8 +24,9 @@ public interface TokenMapper {
    *
    * @param account account.
    * @param list sp of the list.
+   * @return the count of values.
    */
-  int insertSP(String account, List list);
+  int insertSp(String account, List list);
 
   /**
    * Get count by date.
@@ -38,6 +39,9 @@ public interface TokenMapper {
 
   /**
    * Get last date.
+   *
+   * @param account account.
+   * @return the last date of the data.
    */
   String getLastDate(@Param(value = "account") String account);
 }

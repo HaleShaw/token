@@ -62,13 +62,13 @@ public class TokenServiceImpl implements TokenService {
    * @return List.
    */
   @Override
-  public List<Map> getSPFromSteem(String account)
+  public List<Map> getSpFromSteem(String account)
       throws IOException, URISyntaxException, JSONException {
     String response = null;
     List<Map> sp = null;
-    String realURL = String.format(Locale.ENGLISH, url, account);
+    String realUrl = String.format(Locale.ENGLISH, url, account);
     try {
-      response = HttpClientUtils.doGet(realURL);
+      response = HttpClientUtils.doGet(realUrl);
       sp = JSON.parseArray(response, Map.class);
     } catch (URISyntaxException | IOException e) {
       log.error("Http request error!", e);
@@ -99,10 +99,10 @@ public class TokenServiceImpl implements TokenService {
    * @param list sp of the list.
    */
   @Override
-  public void insertSP(String account, List list) {
+  public void insertSp(String account, List list) {
     if (list != null && !list.isEmpty()) {
       log.info("Insert data of {} {}:", account, JSON.toJSONString(list));
-      tokenMapper.insertSP(account, list);
+      tokenMapper.insertSp(account, list);
     }
   }
 
@@ -114,8 +114,9 @@ public class TokenServiceImpl implements TokenService {
   @Override
   @Retryable(value = {
       Exception.class}, maxAttempts = 2, backoff = @Backoff(delay = 600000L, multiplier = 2))
-  public void syncFromSteem(String account, String date)
+  public void syncFromSteem(String account)
       throws IOException, URISyntaxException, JSONException {
+    String date = DateTimeUtils.getYesterday();
 
     int count = getCountByDate(account, date);
     if (count != 0) {
@@ -123,21 +124,21 @@ public class TokenServiceImpl implements TokenService {
       return;
     }
 
-    List<Map> spFromSteem = getSPFromSteem(account);
+    List<Map> spFromSteem = getSpFromSteem(account);
     log.info("Data of {} from Steem: {}", account, JSON.toJSONString(spFromSteem));
 
     if (spFromSteem != null && !spFromSteem.isEmpty()) {
-      BigDecimal totalSP = BigDecimal.ZERO;
+      BigDecimal totalSp = BigDecimal.ZERO;
 
       // Get total sp.
       for (Map<String, Object> delegator : spFromSteem) {
         BigDecimal sp = new BigDecimal(delegator.get("sp").toString());
 
         // ignore the sp which is less than 100 from wherein.
-        if (StringUtils.ACCOUNT_wherein.equalsIgnoreCase(account) && sp.intValue() < 100) {
+        if (StringUtils.ACCOUNT_WHEREIN.equalsIgnoreCase(account) && sp.intValue() < 100) {
           continue;
         }
-        totalSP = totalSP.add(sp);
+        totalSp = totalSp.add(sp);
       }
 
       // Calculate token.
@@ -146,20 +147,21 @@ public class TokenServiceImpl implements TokenService {
         BigDecimal token = BigDecimal.ZERO;
 
         if (StringUtils.ACCOUNT_CNSTM.equalsIgnoreCase(account)) {
-          BigDecimal divide = sp.divide(totalSP, 15, BigDecimal.ROUND_HALF_UP);
+          BigDecimal divide = sp.divide(totalSp, 15, BigDecimal.ROUND_HALF_UP);
           token = divide.multiply(new BigDecimal("7200"));
-        } else if (StringUtils.ACCOUNT_wherein.equalsIgnoreCase(account) && sp.intValue() >= 100) {
-          BigDecimal divide = sp.divide(totalSP, 15, BigDecimal.ROUND_HALF_UP);
+        } else if (StringUtils.ACCOUNT_WHEREIN.equalsIgnoreCase(account) && sp.intValue() >= 100) {
+          BigDecimal divide = sp.divide(totalSp, 15, BigDecimal.ROUND_HALF_UP);
           token = divide.multiply(new BigDecimal("1800"));
         }
         delegator.put("token", token);
       }
     }
-    insertSP(account, spFromSteem);
+    insertSp(account, spFromSteem);
   }
 
   @Recover
-  public void recover(Exception e, String account, String date) {
+  public void recover(Exception e, String account) {
+    String date = DateTimeUtils.getYesterday();
     String time =
         "GMT+8:00 " + new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY_TIME).format(new Date());
     String content =

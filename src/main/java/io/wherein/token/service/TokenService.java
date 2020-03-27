@@ -23,7 +23,7 @@ public interface TokenService {
    * @param account account.
    * @return List.
    */
-  List<Map> getSPFromSteem(String account) throws IOException, URISyntaxException;
+  List<Map> getSpFromSteem(String account) throws IOException, URISyntaxException;
 
   /**
    * Get count by date.
@@ -40,13 +40,12 @@ public interface TokenService {
    * @param account account.
    * @param list sp of the list.
    */
-  void insertSP(String account, List list);
+  void insertSp(String account, List list);
 
   /**
    * Sync from steem.
    *
    * @param account account.
-   * @param date date.
    */
-  void syncFromSteem(String account, String date) throws IOException, URISyntaxException;
+  void syncFromSteem(String account) throws IOException, URISyntaxException;
 }

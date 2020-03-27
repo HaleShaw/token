@@ -75,4 +75,14 @@ public class DateTimeUtils {
     }
     return Pattern.matches(TIME_REGEX, date);
   }
+
+  /**
+   * get yesterday string.
+   */
+  public static String getYesterday() {
+    SimpleDateFormat dateFormatDay = new SimpleDateFormat(DATE_FORMAT_DAY);
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.DATE, -1);
+    return dateFormatDay.format(calendar.getTime());
+  }
 }

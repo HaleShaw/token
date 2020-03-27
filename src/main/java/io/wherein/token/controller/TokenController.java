@@ -3,6 +3,8 @@ package io.wherein.token.controller;
 import io.wherein.token.service.impl.TokenServiceImpl;
 import io.wherein.token.utils.DateTimeUtils;
 import io.wherein.token.utils.StringUtils;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +67,8 @@ public class TokenController {
    * @param account account.
    */
   @PutMapping("/sync")
-  public void syncFromSteem(@RequestParam(name = "account") String account) {
+  public void syncFromSteem(@RequestParam(name = "account") String account)
+      throws IOException, URISyntaxException {
     if (!StringUtils.accountIsAvailable(account)) {
       return;
     }
