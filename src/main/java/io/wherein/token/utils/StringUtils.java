@@ -8,6 +8,8 @@ public class StringUtils {
   public final static String ACCOUNT_CNSTM = "cnstm";
   public final static String ACCOUNT_WHEREIN = "wherein";
 
+  public final static String MAIL_SUBJECT = "[System mail] Sync SP from Steemit failed";
+
   /**
    * Validate whether the account is available.
    *
@@ -21,5 +23,20 @@ public class StringUtils {
     } else {
       return true;
     }
+  }
+
+  /**
+   * get mail content.
+   *
+   * @param account account.
+   * @param date date.
+   * @param time time.
+   * @param e exception.
+   * @return mail content.
+   */
+  public static String getMailContent(String account, String date, String time, Exception e) {
+    return "Hi,\nFailed to synchronize data of " + account + " of " + date + " from Steemit at "
+        + time + ".\nFollowing is the error log.\n\n" + e.toString()
+        + "\n\nSystem mail, please do not reply.";
   }
 }

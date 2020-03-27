@@ -48,4 +48,11 @@ public interface TokenService {
    * @param account account.
    */
   void syncFromSteem(String account) throws IOException, URISyntaxException;
+
+  /**
+   * Sync from steem. If it failed, it will retry.
+   *
+   * @param account account.
+   */
+  void syncFromSteemRetry(String account) throws IOException, URISyntaxException;
 }

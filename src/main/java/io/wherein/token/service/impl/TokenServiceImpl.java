@@ -1,5 +1,7 @@
 package io.wherein.token.service.impl;
 
+import static io.wherein.token.utils.StringUtils.MAIL_SUBJECT;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import io.wherein.token.mapper.TokenMapper;
@@ -10,8 +12,6 @@ import io.wherein.token.utils.StringUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -114,10 +114,30 @@ public class TokenServiceImpl implements TokenService {
   @Override
   @Retryable(value = {
       Exception.class}, maxAttempts = 2, backoff = @Backoff(delay = 600000L, multiplier = 2))
+  public void syncFromSteemRetry(String account)
+      throws IOException, URISyntaxException, JSONException {
+    String date = DateTimeUtils.getYesterday();
+    syncData(account, date);
+  }
+
+  @Override
   public void syncFromSteem(String account)
       throws IOException, URISyntaxException, JSONException {
     String date = DateTimeUtils.getYesterday();
+    syncData(account, date);
+  }
 
+  /**
+   * sync data from steem.
+   *
+   * @param account account.
+   * @param date date.
+   * @throws IOException IOException.
+   * @throws URISyntaxException URISyntaxException.
+   * @throws JSONException JSONException.
+   */
+  private void syncData(String account, String date)
+      throws IOException, URISyntaxException, JSONException {
     int count = getCountByDate(account, date);
     if (count != 0) {
       log.info("There is already the data for {}!", date);
@@ -162,12 +182,8 @@ public class TokenServiceImpl implements TokenService {
   @Recover
   public void recover(Exception e, String account) {
     String date = DateTimeUtils.getYesterday();
-    String time =
-        "GMT+8:00 " + new SimpleDateFormat(DateTimeUtils.DATE_FORMAT_DAY_TIME).format(new Date());
-    String content =
-        "Hi,\nFailed to synchronize data of " + account + " of " + date + " from Steemit at "
-            + time + ".\nFollowing is the error log.\n\n" + e.toString()
-            + "\n\nSystem mail, please do not reply.";
-    mailService.sendMail(toAddr, ccAddr, "[System mail] Sync SP from Steemit failed", content);
+    String time = DateTimeUtils.getTime();
+    String content = StringUtils.getMailContent(account, date, time, e);
+    mailService.sendMail(toAddr, ccAddr, MAIL_SUBJECT, content);
   }
 }

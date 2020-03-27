@@ -30,7 +30,7 @@ public class SyncSchedule {
       @Override
       public void run() {
         try {
-          tokenService.syncFromSteem(StringUtils.ACCOUNT_CNSTM);
+          tokenService.syncFromSteemRetry(StringUtils.ACCOUNT_CNSTM);
         } catch (IOException | URISyntaxException | JSONException e) {
           log.error("Schedule of {} failed!", StringUtils.ACCOUNT_CNSTM);
         }
@@ -41,7 +41,7 @@ public class SyncSchedule {
       @Override
       public void run() {
         try {
-          tokenService.syncFromSteem(StringUtils.ACCOUNT_WHEREIN);
+          tokenService.syncFromSteemRetry(StringUtils.ACCOUNT_WHEREIN);
         } catch (IOException | URISyntaxException | JSONException e) {
           log.error("Schedule of {} failed!", StringUtils.ACCOUNT_WHEREIN);
         }

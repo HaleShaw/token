@@ -1,5 +1,9 @@
 package io.wherein.token.controller;
 
+import static io.wherein.token.utils.StringUtils.MAIL_SUBJECT;
+
+import com.alibaba.fastjson.JSONException;
+import io.wherein.token.service.impl.MailServiceImpl;
 import io.wherein.token.service.impl.TokenServiceImpl;
 import io.wherein.token.utils.DateTimeUtils;
 import io.wherein.token.utils.StringUtils;
@@ -11,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +32,15 @@ public class TokenController {
 
   @Resource
   private TokenServiceImpl tokenService;
+
+  @Resource
+  private MailServiceImpl mailService;
+
+  @Value("${spring.mail.properties.toAddr}")
+  private String toAddr;
+
+  @Value("${spring.mail.properties.ccAddr}")
+  private String ccAddr;
 
   /**
    * Get the sorted data.
@@ -67,11 +81,17 @@ public class TokenController {
    * @param account account.
    */
   @PutMapping("/sync")
-  public void syncFromSteem(@RequestParam(name = "account") String account)
-      throws IOException, URISyntaxException {
+  public void syncFromSteem(@RequestParam(name = "account") String account) {
     if (!StringUtils.accountIsAvailable(account)) {
       return;
     }
-    tokenService.syncFromSteem(account);
+    try {
+      tokenService.syncFromSteem(account);
+    } catch (IOException | URISyntaxException | JSONException e) {
+      String date = DateTimeUtils.getYesterday();
+      String time = DateTimeUtils.getTime();
+      String content = StringUtils.getMailContent(account, date, time, e);
+      mailService.sendMail(toAddr, ccAddr, MAIL_SUBJECT, content);
+    }
   }
 }

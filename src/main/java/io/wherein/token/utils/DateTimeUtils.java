@@ -64,6 +64,15 @@ public class DateTimeUtils {
   }
 
   /**
+   * get current time string.
+   *
+   * @return time string.
+   */
+  public static String getTime() {
+    return "GMT+8:00 " + new SimpleDateFormat(DATE_FORMAT_DAY_TIME).format(new Date());
+  }
+
+  /**
    * Validate whether the date string is standard.
    *
    * @param date date string, "2012-01-31".
