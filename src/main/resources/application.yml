@@ -17,7 +17,7 @@ spring:
           starttls:
             enable: true
             required: true
-      toAddr: heart056571@sina.com
+      toAddr: yinguozi925107@126.com
       ccAddr: haleshaw@163.com
 
 mybatis:
