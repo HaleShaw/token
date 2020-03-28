@@ -113,7 +113,7 @@ public class TokenServiceImpl implements TokenService {
    */
   @Override
   @Retryable(value = {
-      Exception.class}, maxAttempts = 2, backoff = @Backoff(delay = 600000L, multiplier = 2))
+      Exception.class}, maxAttempts = 3, backoff = @Backoff(delay = 30000L, multiplier = 2))
   public void syncFromSteemRetry(String account)
       throws IOException, URISyntaxException, JSONException {
     String date = DateTimeUtils.getYesterday();
