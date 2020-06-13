@@ -32,3 +32,5 @@ logging:
           mapper: info
 
 url: http://uploadbeta.com/api/steemit/delegators/?cached&id=%s&hash=bcee701f176a53ac73463f1fd826431b
+skipDelegators:
+  - misterdelegation

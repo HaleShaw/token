@@ -17,6 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
@@ -38,6 +39,9 @@ public class TokenServiceImpl implements TokenService {
 
   @Value("${spring.mail.properties.ccAddr}")
   private String ccAddr;
+
+  @Value("${skipDelegators}")
+  private List<String> skipDelegators;
 
   @Resource
   private TokenMapper tokenMapper;
@@ -147,7 +151,9 @@ public class TokenServiceImpl implements TokenService {
     List<Map> spFromSteem = getSpFromSteem(account);
     log.info("Data of {} from Steem: {}", account, JSON.toJSONString(spFromSteem));
 
-    if (spFromSteem != null && !spFromSteem.isEmpty()) {
+    if (ObjectUtils.isEmpty(spFromSteem)) {
+      removeSkipDelegators(spFromSteem, skipDelegators);
+
       BigDecimal totalSp = BigDecimal.ZERO;
 
       // Get total sp.
@@ -177,6 +183,17 @@ public class TokenServiceImpl implements TokenService {
       }
     }
     insertSp(account, spFromSteem);
+  }
+
+  /**
+   * Remove the skip delegators.
+   *
+   * @param spFromSteem spFromSteem.
+   * @param skipDelegators skipDelegators.
+   */
+  private void removeSkipDelegators(List<Map> spFromSteem, List<String> skipDelegators) {
+    spFromSteem
+        .removeIf(delegator -> skipDelegators.contains(delegator.get("delegator").toString()));
   }
 
   @Recover
