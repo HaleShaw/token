@@ -12,6 +12,7 @@ import io.wherein.token.utils.StringUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class TokenServiceImpl implements TokenService {
   private String ccAddr;
 
   @Value("${skipDelegators}")
-  private List<String> skipDelegators;
+  private String skipDelegators;
 
   @Resource
   private TokenMapper tokenMapper;
@@ -151,8 +152,9 @@ public class TokenServiceImpl implements TokenService {
     List<Map> spFromSteem = getSpFromSteem(account);
     log.info("Data of {} from Steem: {}", account, JSON.toJSONString(spFromSteem));
 
-    if (ObjectUtils.isEmpty(spFromSteem)) {
-      removeSkipDelegators(spFromSteem, skipDelegators);
+    if (!ObjectUtils.isEmpty(spFromSteem)) {
+      List<String> delegators = Arrays.asList(skipDelegators.split(","));
+      removeSkipDelegators(spFromSteem, delegators);
 
       BigDecimal totalSp = BigDecimal.ZERO;
 
