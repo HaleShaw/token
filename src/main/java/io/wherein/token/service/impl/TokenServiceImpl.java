@@ -12,7 +12,6 @@ import io.wherein.token.utils.StringUtils;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,6 +19,7 @@ import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
+@ConfigurationProperties(prefix = "skip")
 public class TokenServiceImpl implements TokenService {
 
   @Value("${url}")
@@ -41,8 +42,14 @@ public class TokenServiceImpl implements TokenService {
   @Value("${spring.mail.properties.ccAddr}")
   private String ccAddr;
 
-  @Value("${skipDelegators}")
-  private String skipDelegators;
+  /**
+   * Skip delegators.
+   */
+  private List<String> delegators;
+
+  public void setDelegators(List<String> delegators) {
+    this.delegators = delegators;
+  }
 
   @Resource
   private TokenMapper tokenMapper;
@@ -153,7 +160,6 @@ public class TokenServiceImpl implements TokenService {
     log.info("Data of {} from Steem: {}", account, JSON.toJSONString(spFromSteem));
 
     if (!ObjectUtils.isEmpty(spFromSteem)) {
-      List<String> delegators = Arrays.asList(skipDelegators.split(","));
       removeSkipDelegators(spFromSteem, delegators);
 
       BigDecimal totalSp = BigDecimal.ZERO;
